@@ -54,5 +54,5 @@ jobs:
       - name: detect changes
         id: changes
         run: |
-          echo "${{ needs.changedfiles.outputs.staging }}"
-
+          echo "staging => ${{ needs.changed-files.outputs.staging }}"
+          echo "production => ${{ needs.changed-files.outputs.production }}"
