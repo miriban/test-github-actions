@@ -13,22 +13,28 @@ jobs:
     name: detect changed files
     runs-on: ubuntu-latest
     outputs:
-      files: ${{ steps.changes.outputs.all}}
+      files: ${{ steps.changes.outputs.diff}}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Get changed files
         id: changes
         run: |
+          # See https://github.community/t/check-pushed-file-changes-with-git-diff-tree-in-github-actions/17220/10
           if [ $GITHUB_BASE_REF ]; then
             # Pull Request
             git fetch origin $GITHUB_BASE_REF --depth=1
-            echo "::set-output name=all::$( git diff --name-only origin/$GITHUB_BASE_REF $GITHUB_SHA )"
+            export DIFF=$( git diff --name-only origin/$GITHUB_BASE_REF $GITHUB_SHA )
+            echo "Diff between origin/$GITHUB_BASE_REF and $GITHUB_SHA"
           else
             # Push
             git fetch origin ${{ github.event.before }} --depth=1
-            echo "::set-output name=all::$( git diff --name-only ${{ github.event.before }} $GITHUB_SHA )"
+            export DIFF=$( git diff --name-only ${{ github.event.before }} $GITHUB_SHA )
+            echo "Diff between ${{ github.event.before }} and $GITHUB_SHA"
           fi
+          echo "$DIFF"
+          # Escape newlines (replace \n with %0A)
+          echo "::set-output name=diff::$( echo "$DIFF" | sed ':a;N;$!ba;s/\n/%0A/g' )"
   
   deploy-staging:
     name: deploy staging
@@ -41,5 +47,5 @@ jobs:
       - name: detect changes
         id: changes
         run: |
-          echo "${{ needs.changedfiles.outputs.files }}"
+          echo "${{ needs.changedfiles.outputs.diff }}"
 
