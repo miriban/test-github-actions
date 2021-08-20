@@ -33,6 +33,8 @@ jobs:
             export DIFF=$( git diff --name-only ${{ github.event.before }} $GITHUB_SHA )
             echo "Diff between ${{ github.event.before }} and $GITHUB_SHA"
           fi
+          echo "$DIFF"
+          export "DIFF=$( echo "$DIFF" | sed ':a;N;$!ba;s/\n/%0A/g' )"
           while read -r path; do
               if [[ $path == *"deployments/staging.yml"* ]]; then
                   echo "::set-output name=staging::$( echo "1" )"
