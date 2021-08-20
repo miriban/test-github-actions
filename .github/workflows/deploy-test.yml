@@ -20,7 +20,15 @@ jobs:
       - name: Get changed files
         id: changes
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          if [ $GITHUB_BASE_REF ]; then
+            # Pull Request
+            git fetch origin $GITHUB_BASE_REF --depth=1
+            echo "::set-output name=all::$( git diff --name-only origin/$GITHUB_BASE_REF $GITHUB_SHA )"
+          else
+            # Push
+            git fetch origin ${{ github.event.before }} --depth=1
+            echo "::set-output name=all::$( git diff --name-only ${{ github.event.before }} $GITHUB_SHA )"
+          fi
   
   deploy-staging:
     name: deploy staging
