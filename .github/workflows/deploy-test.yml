@@ -34,15 +34,15 @@ jobs:
             echo "Diff between ${{ github.event.before }} and $GITHUB_SHA"
           fi
           echo "$DIFF"
-          export "DIFF=$( echo "$DIFF" | sed ':a;N;$!ba;s/\n/%0A/g' )"
-          while read -r path; do
-              if [[ $path == *"deployments/staging.yml"* ]]; then
+          for file in $DIFF; do
+            echo $file;
+              if [[ $file == *"deployments/staging.yml"* ]]; then
                   echo "::set-output name=staging::$( echo "1" )"
               fi
-              if [[ $path == *"deployments/production.yml"* ]]; then
+              if [[ $file == *"deployments/production.yml"* ]]; then
                   echo "::set-output name=production::$( echo "1" )"
               fi
-          done <<< "$DIFF"
+          done
   
   deploy-staging:
     name: deploy staging
