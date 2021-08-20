@@ -35,11 +35,12 @@ jobs:
           fi
           echo "$DIFF"
           for file in $DIFF; do
-            echo $file;
               if [[ $file == *"deployments/staging.yml"* ]]; then
+                  echo "staging should be 1"
                   echo "::set-output name=staging::$( echo "1" )"
               fi
               if [[ $file == *"deployments/production.yml"* ]]; then
+                  echo "production should be 1"
                   echo "::set-output name=production::$( echo "1" )"
               fi
           done
