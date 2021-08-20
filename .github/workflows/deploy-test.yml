@@ -33,5 +33,5 @@ jobs:
       - name: detect changes
         id: changes
         run: |
-          echo "reached to staging deployment!! ${{ needs.changedfiles.outputs.files }}"
+          echo "${{ needs.changedfiles.outputs.files }}"
 
