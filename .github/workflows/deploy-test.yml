@@ -51,8 +51,8 @@ jobs:
     steps: 
       - name: set env variables
         run: |
-          echo staging >> $ENVIRONMENT
-          echo $(cat deployments/staging.json) >> $CONFIG
+          export ENVIRONMENT=staging
+          export CONFIG=$(cat deployments/staging.json)
       - name: Checkout
         uses: actions/checkout@v2
       - name: detect changes
