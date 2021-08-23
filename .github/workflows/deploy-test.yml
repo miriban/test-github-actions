@@ -35,37 +35,26 @@ jobs:
           fi
           echo "$DIFF"
           for file in $DIFF; do
-              if [[ $file == *"deployments/staging.yml"* ]]; then
+              if [[ $file == *"deployments/staging.json"* ]]; then
                   echo "::set-output name=staging::$( echo "1" )"
               fi
-              if [[ $file == *"deployments/production.yml"* ]]; then
+              if [[ $file == *"deployments/production.json"* ]]; then
                   echo "::set-output name=production::$( echo "1" )"
               fi
           done
   
-  deploy-staging:
+  deployment:
     name: deploy staging
     runs-on: ubuntu-latest
     needs: changed-files
     if: ${{ needs.changed-files.outputs.staging == '1' }}
-    steps:
+    env:
+      ENVIRONMENT: ${{ if [[ needs.changed-files.outputs.staging == '1' ]]; then 'Staging'; else 'Production'; }}
+      CONFIG: ${{ cat deployments/staging.json}}
+    steps: 
       - name: Checkout
         uses: actions/checkout@v2
       - name: detect changes
         id: changes
         run: |
-          echo "running staging"
-
-
-  deploy-production:
-    name: deploy production
-    runs-on: ubuntu-latest
-    needs: changed-files
-    if: ${{ needs.changed-files.outputs.production == '1' }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: detect changes
-        id: changes
-        run: |
-          echo "running prodution"
+          echo "running $ENVIRONMENT => $CONFIG"
