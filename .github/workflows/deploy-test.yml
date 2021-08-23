@@ -50,9 +50,11 @@ jobs:
     if: ${{ needs.changed-files.outputs.staging == '1' }}
     steps: 
       - name: set env variables
+        with:
+          path: ./deployments
         run: |
           echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-          echo "CONFIG=$(cat test-github-actions/deployments/staging.json)" >> $GITHUB_ENV
+          echo "CONFIG=$(cat staging.json)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
       - name: detect changes
