@@ -49,7 +49,6 @@ jobs:
     needs: changed-files
     if: ${{ needs.changed-files.outputs.staging == '1' }}
     env:
-      ENVIRONMENT: ${{ if [[ needs.changed-files.outputs.staging == '1' ]]; then 'Staging'; else 'Production'; }}
       CONFIG: ${{ cat deployments/staging.json}}
     steps: 
       - name: Checkout
