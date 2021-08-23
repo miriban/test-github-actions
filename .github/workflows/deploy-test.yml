@@ -54,7 +54,9 @@ jobs:
       - name: set env variables
         run: |
           echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-          echo "CONFIG='$(cat deployments/staging.json)'" >> $GITHUB_ENV
+          echo 'CONFIG<<EOF' >> $GITHUB_ENV
+          cat deployments/staging.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: detect changes
         id: changes
         run: |
