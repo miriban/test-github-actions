@@ -51,8 +51,8 @@ jobs:
     steps: 
       - name: set env variables
         run: |
-          export ENVIRONMENT=staging
-          export CONFIG=$(cat deployments/staging.json)
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "CONFIG=$(cat deployments/staging.json)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
       - name: detect changes
