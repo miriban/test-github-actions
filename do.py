@@ -7,8 +7,5 @@ def connect(hostname, port):
     sock.close()
     return result == 0
 
-for i in range(40,60):
-    base_ip = '10.1.0.'
-    res = connect(base_ip+str(i), 22)
-    if res:
-        print("Device found at: ",base_ip+str(i) + ":"+str(22))
+if __name__ == '__main__':
+    for i in {1..254} ;do (ping 10.1.0.$i -c 1 -w 5  >/dev/null && echo "10.1.0.$i" &) ;done
