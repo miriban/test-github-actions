@@ -7,7 +7,7 @@ def connect(hostname, port):
     sock.close()
     return result == 0
 
-for i in range(0,255):
+for i in range(40,60):
     base_ip = '10.1.0.'
     res = connect(base_ip+str(i), 22)
     if res:
