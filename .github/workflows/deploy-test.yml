@@ -4,23 +4,27 @@ on:
   push:
     branches:
       - master
-    paths:
-      - deployments/**
 
 
 jobs:
-  changed-files:
-    name: detect changed files
+  build:
+
     runs-on: ubuntu-latest
-    outputs:
-      staging: ${{ steps.changes.outputs.staging }}
-      production: ${{ steps.changes.output.production }}
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Get changed files
-        id: changes
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
         run: |
-          # Get the current ip adderss 
-          IP_ADD=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
-          echo $IP_ADD;
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: test python
+        run: |
+          python3 do.py
