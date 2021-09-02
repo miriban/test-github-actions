@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       staging: ${{ steps.changes.outputs.staging }}
-      production: ${{ steps.changes.output.production }}
+      production: ${{ steps.changes.outputs.production }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -34,10 +34,10 @@ jobs:
           echo "$DIFF"
           for file in $DIFF; do
               if [[ $file == *"staging.json"* ]]; then
-                  echo "::set-output name=staging::1"
+                  echo "::set-output name=staging::$( echo "1" )"
               fi
               if [[ $file == *"production.json"* ]]; then
-                  echo "::set-output name=production::1"
+                  echo "::set-output name=production::$( echo "1" )"
               fi
           done
   build:
@@ -46,9 +46,9 @@ jobs:
     steps:
       - name: test if statement
         run: |
-          if ${{ needs.changed-files.outputs.production == 1 }}; then
-            echo "Production";
+           if [[ needs.changed-files.outputs.production == '1' ]]; then
+            CONFIGURATIONS_FILE=deployments/@wunder/tools-iot-connector-health-checker/production.json
           else
-            echo "Staging";
+            CONFIGURATIONS_FILE=deployments/@wunder/tools-iot-connector-health-checker/staging.json
           fi
-          echo "Production =>  ${{needs.changed-files.outputs.production}}"
+          echo CONFIGURATIONS_FILE;
