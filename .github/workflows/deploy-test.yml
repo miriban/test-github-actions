@@ -34,11 +34,10 @@ jobs:
           echo "$DIFF"
           for file in $DIFF; do
               if [[ $file == *"staging.json"* ]]; then
-                  echo "::set-output name=staging::1"
+                  echo "::set-output name=staging::$( echo "1" )"
               fi
               if [[ $file == *"production.json"* ]]; then
-                  echo "::set-output name=production::1"
-                  echo "Production should be set"
+                  echo "::set-output name=production::$( echo "1" )"
               fi
           done
   build:
@@ -47,9 +46,9 @@ jobs:
     steps:
       - name: test if statement
         run: |
-          if ${{ needs.changed-files.outputs.production }}; then
+          if [[ needs.changed-files.outputs.production == '1' ]]; then
             echo "Production";
           else
             echo "Staging";
           fi
-          echo "production => ${{ needs.changed-files.outputs.production}}";
+          echo "Production =>  ${{needs.changed-files.outputs.production}}"
