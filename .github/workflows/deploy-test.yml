@@ -46,8 +46,9 @@ jobs:
     steps:
       - name: test if statement
         run: |
-          if [[ needs.changed-files.outputs.production == '1' ]]; then
+          if [[ ${needs.changed-files.outputs.production} == '1' ]]; then
             echo "Production";
           else
             echo "Staging";
           fi
+          echo "production => " ${needs.changed-files.outputs.production};
