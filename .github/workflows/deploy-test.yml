@@ -34,10 +34,11 @@ jobs:
           echo "$DIFF"
           for file in $DIFF; do
               if [[ $file == *"staging.json"* ]]; then
-                  echo "::set-output name=staging::$( echo "1" )"
+                  echo "::set-output name=staging::1"
               fi
               if [[ $file == *"production.json"* ]]; then
-                  echo "::set-output name=production::$( echo "1" )"
+                  echo "::set-output name=production::1"
+                  echo "Production should be set"
               fi
           done
   build:
