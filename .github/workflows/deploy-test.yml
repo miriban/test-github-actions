@@ -47,8 +47,8 @@ jobs:
       - name: test if statement
         run: |
            if [[ needs.changed-files.outputs.production == '1' ]]; then
-            CONFIGURATIONS_FILE=deployments/@wunder/tools-iot-connector-health-checker/production.json
+            CONFIGURATIONS_FILE=production.json
           else
-            CONFIGURATIONS_FILE=deployments/@wunder/tools-iot-connector-health-checker/staging.json
+            CONFIGURATIONS_FILE=staging.json
           fi
           echo CONFIGURATIONS_FILE;
