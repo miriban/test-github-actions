@@ -51,4 +51,4 @@ jobs:
           else
             CONFIGURATIONS_FILE=staging.json
           fi
-          echo CONFIGURATIONS_FILE;
+          echo $CONFIGURATIONS_FILE;
